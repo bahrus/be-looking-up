@@ -26,3 +26,22 @@ If JSON array, uses value or id or first field for value.  Uses name or label or
 ```
 
 params uses be-observant syntax.
+
+## XSLT
+
+```html
+<select be-looking-up='{
+    "url": "https://mydomain.com/api/path-to-json",
+    "as": "html",
+    "xslt": "https://mydomain.com/api/path-to-xslt",
+    "params": {
+        "id": ".id"
+    },
+    "mapping": {
+        "value": "id",
+        "text": "name"
+    }
+}'></select>
+```
+
+xslt is optional
