@@ -12,7 +12,7 @@ If JSON array, uses value or id or first field for value.  Uses name or label or
 ## Options
 
 ```html
-<select be-lookup-up='{
+<select be-looking-up='{
     "url": "https://mydomain.com/api/path-to-json",
     "as": "json",
     "params": {
