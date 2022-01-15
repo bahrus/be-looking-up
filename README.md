@@ -15,6 +15,7 @@ If JSON array, uses value or id or first field for value.  Uses name or label or
 <select be-looking-up='{
     "url": "https://mydomain.com/api/path-to-json",
     "as": "json",
+    "cache": true,
     "params": {
         "id": ".id"
     },
@@ -45,3 +46,4 @@ params uses be-observant syntax.
 ```
 
 xslt is optional
+
