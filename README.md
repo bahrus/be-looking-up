@@ -12,7 +12,8 @@ If JSON array, uses value or id or first field for value.  Uses name or label or
 ## Options
 
 ```html
-<select be-looking-up='{
+<label for=target>Target</label>
+<select id=target be-looking-up='{
     "url": "https://mydomain.com/api/path-to-json",
     "as": "json",
     "cache": true,
@@ -31,7 +32,8 @@ params uses be-observant syntax.
 ## XSLT
 
 ```html
-<select be-looking-up='{
+<label for=object>Object</label>
+<select id=object be-looking-up='{
     "url": "https://mydomain.com/api/path-to-json",
     "as": "html",
     "xslt": "https://mydomain.com/api/path-to-xslt",
