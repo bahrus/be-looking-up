@@ -1,5 +1,7 @@
 # be-looking-up [TODO]
 
+Attribute-based DOM decorator/behavior equivalent of xtal-fetch.
+
 ```html
 <select>
     <template be-looking-up=https://images-api.nasa.gov/search?debiaski></template>
@@ -25,6 +27,7 @@ However, JSON also supported, but requires more work:
             }
         },
         "as": "json",
+        "hostAdjuster": "myHostMethod",
         "cache": true,
         "path":[
 
@@ -32,7 +35,7 @@ However, JSON also supported, but requires more work:
         "params": {
             "search": ["debiaski"],
         },
-        "transform": {
+        "templateTransform": {
             "option": [{"textContent": "name", "value": "id"}]
         }
     }'>
@@ -79,6 +82,13 @@ consistent syntax with be-reformable.
 <select id=object>
     <template be-looking-up='{
         "url": "https://images-api.nasa.gov/",
+        "reqInit": {
+            "method": "GET",
+            "headers": {
+                "Accept": "text/html",
+                "Authorization": "Bearer <token>"
+            }
+        },
         "as": "html",
         "xslt": "https://mydomain.com/api/path-to-xslt",
         "path": [
@@ -86,7 +96,7 @@ consistent syntax with be-reformable.
             {
                 "observe": "target",
             }
-        ]
+        ],
         "mapping": {
             "value": "id",
             "text": "name"
