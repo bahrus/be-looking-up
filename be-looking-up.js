@@ -12,7 +12,7 @@ export class BeLookingUpController {
         const resp = await fetch(urlVal);
         switch (as) {
             case 'html':
-                proxy.insertAdjacentHTML('beforeend', await resp.text());
+                proxy.innerHTML = await resp.text();
                 break;
         }
     }
