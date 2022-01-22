@@ -23,10 +23,10 @@ export class BeLookingUpController {
                 break;
             case 'json':
                 {
-                    let templ = proxy.querySelector(`template[${this.#beDecorProps.ifWantsToBe + '-template'}]`);
+                    let templ = proxy.querySelector(`template[be-${this.#beDecorProps.ifWantsToBe}-template]`);
                     if (templ === null) {
                         templ = document.createElement('template');
-                        templ.setAttribute(this.#beDecorProps.ifWantsToBe + '-template', '');
+                        templ.setAttribute(`be-${this.#beDecorProps.ifWantsToBe}-template`, '');
                         proxy.prepend(templ);
                     }
                     templ.value = await resp.json();

@@ -25,10 +25,10 @@ export class BeLookingUpController implements BeLookingUpActions{
                 break;
             case 'json':
                 {
-                    let templ = proxy.querySelector(`template[${this.#beDecorProps.ifWantsToBe + '-template'}]`);
+                    let templ = proxy.querySelector(`template[be-${this.#beDecorProps.ifWantsToBe}-template]`);
                     if(templ === null){
                         templ = document.createElement('template');
-                        templ.setAttribute(this.#beDecorProps.ifWantsToBe + '-template', '');
+                        templ.setAttribute(`be-${this.#beDecorProps.ifWantsToBe}-template`, '');
                         proxy.prepend(templ);
                     }
                     (<any>templ).value = await resp.json();
