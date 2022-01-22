@@ -22,18 +22,7 @@
         <template is="templ-ext"></template>
     </select>
 
-    <script>
-        customElements.define('templ-ext', class extends HTMLTemplateElement {
-            constructor() {
-                super();
-                console.log('in constructor');
-            }
 
-            connectedCallback() {
-                console.log('in connectedCallback');
-            }
-        }, {extends: 'template'});
-    </script>
     
     <script type=importmap>
         {
@@ -51,5 +40,19 @@
         import '../be-looking-up.js';
         
     </script>
+
+<script type=module>
+    import 'https://unpkg.com/@corpuscule/custom-builtin-elements';
+    customElements.define('templ-ext', class extends HTMLTemplateElement {
+        constructor() {
+            super();
+            alert('in constructor');
+        }
+
+        connectedCallback() {
+            alert('in connectedCallback');
+        }
+    }, {extends: 'template'});
+</script>
 </body>
 </html>
