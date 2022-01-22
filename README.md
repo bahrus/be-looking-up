@@ -32,7 +32,7 @@ However, JSON also supported, but requires more work:
             "option": [{"textContent": "name", "value": "id"}]
         }
 }'>
-    <template></template>
+    <template be-looking-up-template></template>
 </select>
 ```
 

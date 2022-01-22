@@ -5,6 +5,7 @@ import {hookUp} from 'be-observant/hookUp.js';
 
 export class BeLookingUpController implements BeLookingUpActions{
     #beDecorProps!: BeDecoratedProps;
+    #abortController: AbortController | undefined;
     intro(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
         this.#beDecorProps = beDecorProps;
     }
@@ -14,8 +15,16 @@ export class BeLookingUpController implements BeLookingUpActions{
     onInProgressClass({inProgressClass, proxy}: this): void {
         hookUp(inProgressClass, proxy, 'inProgressClassVal');
     }
-    async onUrlVal({urlVal, as, proxy, baseLink, inProgressClassVal}: this): Promise<void>{
+    async onUrlVal({urlVal, as, proxy, fetchInProgress, baseLink, inProgressClassVal}: this): Promise<void>{
+        if(this.#abortController !== undefined){
+            if(fetchInProgress){
+                this.#abortController.abort();
+            }
+        }else{
+            this.#abortController = new AbortController();
+        }
         if(inProgressClassVal){
+            proxy.fetchInProgress = true;
             proxy.classList.add(inProgressClassVal);
         }
         const resp = await fetch(urlVal!);
@@ -43,6 +52,7 @@ export class BeLookingUpController implements BeLookingUpActions{
         }
         if(inProgressClassVal){
             proxy.classList.remove(inProgressClassVal);
+            proxy.fetchInProgress = false;
         }
     }
 }
@@ -62,10 +72,15 @@ define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>
             upgrade,
             ifWantsToBe,
             forceVisible: [upgrade],
-            virtualProps: ['url', 'urlVal', 'as', 'baseLink', 'inProgressClass', 'inProgressClassVal', 'method', 'methodVal', 'mode', 'credentials', 'cache', 'redirect', 'referrerPolicy'],
+            virtualProps: [
+                'url', 'urlVal', 'as', 'baseLink', 'inProgressClass', 'inProgressClassVal', 
+                'method', 'methodVal', 'mode', 'credentials', 'cache', 'redirect', 
+                'referrerPolicy', 'fetchInProgress',
+            ],
             primaryProp: 'urlVal',
             proxyPropDefaults: {
                 as: 'html',
+                fetchInProgress: false,
             },
             intro: 'intro',
             //finale
