@@ -19,7 +19,7 @@
   },
   "files": [
     "*.*",
-    "demo/*.*",
+    "demo/*.*"
   ],
   "types": "types.d.ts",
   "dependencies": {
