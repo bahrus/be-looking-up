@@ -1,10 +1,40 @@
 {
   "name": "be-looking-up",
   "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
+  "keywords": [
+    "web-components",
+    "web-component",
+    "custom-element",
+    "custom-elements",
+    "template",
+    "bind",
+    "fetch"
+  ],
+  "description": "fetch data and replace template.",
+  "main": "be-looking-up.js",
+  "module": "be-looking-up.js",
+  "exports": {
+    ".": "./be-looking-up.js",
+    "./be-looking-up.js": "./be-looking-up.js"
+  },
+  "files": [
+    "*.*"
+  ],
+  "types": "types.d.ts",
+  "dependencies":{
+    "be-decorated": "0.0.64",
+    "be-hive": "0.0.19"
+  },
+  "devDependencies": {
+    "xtal-test": "0.0.54",
+    "@skypack/package-check": "0.2.2",
+    "@custom-elements-manifest/analyzer": "0.5.7"  
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "node node_modules/xtal-test/serve.js",
+    "package-check": "package-check",
+    "doc": "custom-elements-manifest analyze"
   },
   "repository": {
     "type": "git",
