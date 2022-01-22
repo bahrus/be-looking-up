@@ -3,6 +3,7 @@ import { define } from 'be-decorated/be-decorated.js';
 import { hookUp } from 'be-observant/hookUp.js';
 export class BeLookingUpController {
     #beDecorProps;
+    #abortController;
     intro(proxy, target, beDecorProps) {
         this.#beDecorProps = beDecorProps;
     }
@@ -12,8 +13,25 @@ export class BeLookingUpController {
     onInProgressClass({ inProgressClass, proxy }) {
         hookUp(inProgressClass, proxy, 'inProgressClassVal');
     }
-    async onUrlVal({ urlVal, as, proxy, baseLink, inProgressClassVal }) {
+    async onUrlValPre({ urlVal, proxy, debounceDuration }) {
+        setTimeout(() => {
+            proxy.urlValEcho = urlVal;
+        }, debounceDuration);
+    }
+    async onUrlVal({ urlVal, urlValEcho, as, proxy, fetchInProgress, baseLink, inProgressClassVal }) {
+        if (urlVal !== urlValEcho) {
+            return;
+        }
+        if (this.#abortController !== undefined) {
+            if (fetchInProgress) {
+                this.#abortController.abort();
+            }
+        }
+        else {
+            this.#abortController = new AbortController();
+        }
         if (inProgressClassVal) {
+            proxy.fetchInProgress = true;
             proxy.classList.add(inProgressClassVal);
         }
         const resp = await fetch(urlVal);
@@ -40,6 +58,7 @@ export class BeLookingUpController {
         }
         if (inProgressClassVal) {
             proxy.classList.remove(inProgressClassVal);
+            proxy.fetchInProgress = false;
         }
     }
 }
@@ -53,17 +72,24 @@ define({
             upgrade,
             ifWantsToBe,
             forceVisible: [upgrade],
-            virtualProps: ['url', 'urlVal', 'as', 'baseLink', 'inProgressClass', 'inProgressClassVal', 'method', 'methodVal', 'mode', 'credentials', 'cache', 'redirect', 'referrerPolicy'],
+            virtualProps: [
+                'url', 'urlVal', 'urlValEcho', 'as', 'baseLink', 'inProgressClass', 'inProgressClassVal',
+                'method', 'methodVal', 'mode', 'credentials', 'cache', 'redirect',
+                'referrerPolicy', 'fetchInProgress', 'debounceDuration'
+            ],
             primaryProp: 'urlVal',
             proxyPropDefaults: {
                 as: 'html',
+                fetchInProgress: false,
+                debounceDuration: 20,
             },
             intro: 'intro',
             //finale
         },
         actions: {
             onUrl: 'url',
-            onUrlVal: 'urlVal',
+            onUrlValPre: 'urlVal',
+            onUrlVal: 'urlValEcho',
         }
     },
     complexPropDefaults: {

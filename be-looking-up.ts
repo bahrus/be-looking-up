@@ -15,7 +15,13 @@ export class BeLookingUpController implements BeLookingUpActions{
     onInProgressClass({inProgressClass, proxy}: this): void {
         hookUp(inProgressClass, proxy, 'inProgressClassVal');
     }
-    async onUrlVal({urlVal, as, proxy, fetchInProgress, baseLink, inProgressClassVal}: this): Promise<void>{
+    async onUrlValPre({urlVal, proxy, debounceDuration}: this){
+        setTimeout(() => {
+            proxy.urlValEcho = urlVal;
+        }, debounceDuration);
+    }
+    async onUrlVal({urlVal, urlValEcho, as, proxy, fetchInProgress, baseLink, inProgressClassVal}: this): Promise<void>{
+        if(urlVal !== urlValEcho){ return; }
         if(this.#abortController !== undefined){
             if(fetchInProgress){
                 this.#abortController.abort();
@@ -73,21 +79,23 @@ define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>
             ifWantsToBe,
             forceVisible: [upgrade],
             virtualProps: [
-                'url', 'urlVal', 'as', 'baseLink', 'inProgressClass', 'inProgressClassVal', 
+                'url', 'urlVal', 'urlValEcho', 'as', 'baseLink', 'inProgressClass', 'inProgressClassVal', 
                 'method', 'methodVal', 'mode', 'credentials', 'cache', 'redirect', 
-                'referrerPolicy', 'fetchInProgress',
+                'referrerPolicy', 'fetchInProgress', 'debounceDuration'
             ],
             primaryProp: 'urlVal',
             proxyPropDefaults: {
                 as: 'html',
                 fetchInProgress: false,
+                debounceDuration: 20,
             },
             intro: 'intro',
             //finale
         },
         actions:{
             onUrl: 'url',
-            onUrlVal: 'urlVal',
+            onUrlValPre: 'urlVal',
+            onUrlVal: 'urlValEcho',
         }
     },
     complexPropDefaults:{
