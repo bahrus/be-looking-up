@@ -2,6 +2,10 @@ import { register } from 'be-hive/register.js';
 import { define } from 'be-decorated/be-decorated.js';
 import { hookUp } from 'be-observant/hookUp.js';
 export class BeLookingUpController {
+    #beDecorProps;
+    intro(proxy, target, beDecorProps) {
+        this.#beDecorProps = beDecorProps;
+    }
     onUrl({ url, proxy }) {
         hookUp(url, proxy, 'urlVal');
     }
@@ -13,6 +17,22 @@ export class BeLookingUpController {
         switch (as) {
             case 'html':
                 proxy.innerHTML = await resp.text();
+                break;
+            case 'json':
+                {
+                    let templ = proxy.querySelector(`template[${this.#beDecorProps.ifWantsToBe + '-template'}]`);
+                    if (templ === null) {
+                        templ = document.createElement('template');
+                        templ.setAttribute(this.#beDecorProps.ifWantsToBe + '-template', '');
+                        proxy.prepend(templ);
+                    }
+                    templ.value = await resp.json();
+                    templ.dispatchEvent(new CustomEvent('value-changed', {
+                        detail: {
+                            value: templ.value,
+                        }
+                    }));
+                }
                 break;
         }
     }
@@ -32,7 +52,7 @@ define({
             proxyPropDefaults: {
                 as: 'html',
             },
-            //intro,
+            intro: 'intro',
             //finale
         },
         actions: {

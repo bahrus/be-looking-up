@@ -4,6 +4,10 @@ import {BeLookingUpActions, BeLookingUpVirtualProps, BeLookingUpProps} from './t
 import {hookUp} from 'be-observant/hookUp.js';
 
 export class BeLookingUpController implements BeLookingUpActions{
+    #beDecorProps!: BeDecoratedProps;
+    intro(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
+        this.#beDecorProps = beDecorProps;
+    }
     onUrl({url, proxy}: this): void{
         hookUp(url, proxy, 'urlVal');
     }
@@ -15,6 +19,23 @@ export class BeLookingUpController implements BeLookingUpActions{
         switch(as){
             case 'html':
                 proxy.innerHTML = await resp.text();
+                break;
+            case 'json':
+                {
+                    let templ = proxy.querySelector(`template[${this.#beDecorProps.ifWantsToBe + '-template'}]`);
+                    if(templ === null){
+                        templ = document.createElement('template');
+                        templ.setAttribute(this.#beDecorProps.ifWantsToBe + '-template', '');
+                        proxy.prepend(templ);
+                    }
+                    (<any>templ).value = await resp.json();
+                    templ.dispatchEvent(new CustomEvent('value-changed', {
+                        detail: {
+                            value: (<any>templ).value,
+                        }
+                    }));
+                }
+
                 break;
         }
     }
@@ -40,7 +61,7 @@ define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>
             proxyPropDefaults: {
                 as: 'html',
             },
-            //intro,
+            intro: 'intro',
             //finale
         },
         actions:{
