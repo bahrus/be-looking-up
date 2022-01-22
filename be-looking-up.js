@@ -5,7 +5,10 @@ export class BeLookingUpController {
     onUrl({ url, proxy }) {
         hookUp(url, proxy, 'urlVal');
     }
-    async onUrlVal({ urlVal, as, proxy }) {
+    onInProgressClass({ inProgressClass, proxy }) {
+        hookUp(inProgressClass, proxy, 'inProgressClassVal');
+    }
+    async onUrlVal({ urlVal, as, proxy, baseLink, inProgressClassVal }) {
         const resp = await fetch(urlVal);
         switch (as) {
             case 'html':
@@ -24,8 +27,8 @@ define({
             upgrade,
             ifWantsToBe,
             forceVisible: [upgrade],
-            virtualProps: ['url', 'urlVal', 'as'],
-            primaryProp: 'url',
+            virtualProps: ['url', 'urlVal', 'as', 'baseLink', 'inProgressClass', 'inProgressClassVal', 'method', 'methodVal', 'mode', 'credentials', 'cache', 'redirect', 'referrerPolicy'],
+            primaryProp: 'urlVal',
             proxyPropDefaults: {
                 as: 'html',
             },

@@ -3,7 +3,7 @@
 Attribute-based DOM decorator/behavior equivalent of xtal-fetch.
 
 ```html
-<select be-looking-up='["https://images-api.nasa.gov/search?debiaski"]'></select>
+<select be-looking-up=https://images-api.nasa.gov/search?debiaski></select>
 ```
 
 If api returns html for options, sets innerHTML to the result.  

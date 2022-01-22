@@ -1,12 +1,13 @@
 import {BeDecoratedProps, EventHandler} from 'be-decorated/types';
-import {IObserve} from 'be-observant/types';
+import {IObserve, InterpolatingObserveParams} from 'be-observant/types';
 
-type InterpolatingObserveParams<T> = T | IObserve | InterpolatingObserveParams<T>[];
+
 export interface BeLookingUpVirtualProps{
     url?: InterpolatingObserveParams<string>,
     urlVal?: string,
     as?: 'html' | 'json',
-    inProgressClass?: string | IObserve;
+    inProgressClass?: InterpolatingObserveParams<string>;
+    inProgressClassVal?: string,
     baseLink?: string,
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | IObserve,
     methodVal?: 'GET' | 'POST' | 'PUT' | 'DELETE',
@@ -26,4 +27,5 @@ export interface BeLookingUpProps extends BeLookingUpVirtualProps{
 export interface BeLookingUpActions{
     onUrl(self: this): void;
     onUrlVal(self: this): Promise<void>;
+    onInProgressClass(self: this): void;
 }

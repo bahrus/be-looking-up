@@ -7,7 +7,10 @@ export class BeLookingUpController implements BeLookingUpActions{
     onUrl({url, proxy}: this): void{
         hookUp(url, proxy, 'urlVal');
     }
-    async onUrlVal({urlVal, as, proxy}: this): Promise<void>{
+    onInProgressClass({inProgressClass, proxy}: this): void {
+        hookUp(inProgressClass, proxy, 'inProgressClassVal');
+    }
+    async onUrlVal({urlVal, as, proxy, baseLink, inProgressClassVal}: this): Promise<void>{
         const resp = await fetch(urlVal!);
         switch(as){
             case 'html':
@@ -32,8 +35,8 @@ define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>
             upgrade,
             ifWantsToBe,
             forceVisible: [upgrade],
-            virtualProps: ['url', 'urlVal', 'as'],
-            primaryProp: 'url',
+            virtualProps: ['url', 'urlVal', 'as', 'baseLink', 'inProgressClass', 'inProgressClassVal', 'method', 'methodVal', 'mode', 'credentials', 'cache', 'redirect', 'referrerPolicy'],
+            primaryProp: 'urlVal',
             proxyPropDefaults: {
                 as: 'html',
             },
