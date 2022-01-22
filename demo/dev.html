@@ -11,10 +11,29 @@
     <select name=composers id=composers be-looking-up=./composers.html>
     </select>
 
+    <label for=composers2>Composers</label>
     <select name=composers2 id=composers2 be-looking-up='{
         "urlVal": "./composers.json",
         "as": "json"
-    }'>
+    }'></select>
+
+    <label for=composers3>Composers</label>
+    <select name=composers3 id=composers3>
+        <template is="templ-ext"></template>
+    </select>
+
+    <script>
+        customElements.define('templ-ext', class extends HTMLTemplateElement {
+            constructor() {
+                super();
+                console.log('in constructor');
+            }
+
+            connectedCallback() {
+                console.log('in connectedCallback');
+            }
+        }, {extends: 'template'});
+    </script>
     
     <script type=importmap>
         {
