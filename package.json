@@ -18,7 +18,8 @@
     "./be-looking-up.js": "./be-looking-up.js"
   },
   "files": [
-    "*.*"
+    "*.*",
+    "demo/*.*",
   ],
   "types": "types.d.ts",
   "dependencies": {
