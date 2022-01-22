@@ -13,6 +13,9 @@ export class BeLookingUpController {
         hookUp(inProgressClass, proxy, 'inProgressClassVal');
     }
     async onUrlVal({ urlVal, as, proxy, baseLink, inProgressClassVal }) {
+        if (inProgressClassVal) {
+            proxy.classList.add(inProgressClassVal);
+        }
         const resp = await fetch(urlVal);
         switch (as) {
             case 'html':
@@ -34,6 +37,9 @@ export class BeLookingUpController {
                     }));
                 }
                 break;
+        }
+        if (inProgressClassVal) {
+            proxy.classList.remove(inProgressClassVal);
         }
     }
 }
