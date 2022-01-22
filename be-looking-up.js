@@ -1,12 +1,9 @@
 import { register } from 'be-hive/register.js';
 import { define } from 'be-decorated/be-decorated.js';
+import { hookUp } from 'be-observant/hookUp.js';
 export class BeLookingUpController {
     onUrl({ url, proxy }) {
-        switch (typeof url) {
-            case 'string':
-                proxy.urlVal = url;
-                break;
-        }
+        hookUp(url, proxy, 'urlVal');
     }
     async onUrlVal({ urlVal, as, proxy }) {
         const resp = await fetch(urlVal);

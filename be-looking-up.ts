@@ -1,18 +1,14 @@
 import {register} from 'be-hive/register.js';
 import {define, BeDecoratedProps} from 'be-decorated/be-decorated.js';
 import {BeLookingUpActions, BeLookingUpVirtualProps, BeLookingUpProps} from './types';
-
+import {hookUp} from 'be-observant/hookUp.js';
 
 export class BeLookingUpController implements BeLookingUpActions{
     onUrl({url, proxy}: this): void{
-        switch(typeof url){
-            case 'string':
-                proxy.urlVal = url;
-                break;
-        }
+        hookUp(url, proxy, 'urlVal');
     }
     async onUrlVal({urlVal, as, proxy}: this): Promise<void>{
-        const resp = await fetch(urlVal);
+        const resp = await fetch(urlVal!);
         switch(as){
             case 'html':
                 proxy.insertAdjacentHTML('beforeend', await resp.text());

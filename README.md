@@ -3,12 +3,10 @@
 Attribute-based DOM decorator/behavior equivalent of xtal-fetch.
 
 ```html
-<select>
-    <template be-looking-up=https://images-api.nasa.gov/search?debiaski></template>
-</select>
+<select be-looking-up='["https://images-api.nasa.gov/search?debiaski"]'></select>
 ```
 
-If api returns html for options, replace template with HTML.  
+If api returns html for options, sets innerHTML to the result.  
 
 However, JSON also supported, but requires more work:
 
@@ -16,16 +14,11 @@ However, JSON also supported, but requires more work:
 
 ```html
 <label for=target>Target</label>
-<select id=target>
-    <template be-looking-up='{
-        "url": "https://images-api.nasa.gov/search",
-        "reqInit": {
-            "method": "GET",
-            "headers": {
-                "Accept": "application/json",
-                "Authorization": "Bearer <token>"
-            }
-        },
+<select id=target be-looking-up='{
+        "url": ["https://images-api.nasa.gov/search"],
+        "baseLink": "my-preconnect-link-id",
+        "method": "GET",
+        "headers": "...",
         "as": "json",
         "hostAdjuster": "myHostMethod",
         "cache": true,
@@ -38,11 +31,14 @@ However, JSON also supported, but requires more work:
         "templateTransform": {
             "option": [{"textContent": "name", "value": "id"}]
         }
-    }'>
-        <option></option>
-    </template>
+}'>
+    <template></template>
 </select>
 ```
+
+What this does:
+
+Sets the value of template to the result, emits event value-changed.
 
 params uses be-observant syntax.
 
