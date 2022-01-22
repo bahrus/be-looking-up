@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <label for=composers>Composers</label>
+    <!-- <label for=composers>Composers</label>
     <select name=composers id=composers be-looking-up=./composers.html>
     </select>
 
@@ -15,11 +15,11 @@
     <select name=composers2 id=composers2 be-looking-up='{
         "urlVal": "./composers.json",
         "as": "json"
-    }'></select>
+    }'></select> -->
 
     <label for=composers3>Composers</label>
-    <select name=composers3 id=composers3>
-        <template is="templ-ext"></template>
+    <select name=composers3 id=composers3 be-vigilant>
+        <template be-looking-up=./composers.html></template>
     </select>
 
 
@@ -32,27 +32,16 @@
                 "be-decorated/": "../node_modules/be-decorated/",
                 "on-to-me/": "../node_modules/on-to-me/",
                 "be-observant/": "../node_modules/be-observant/",
-                "be-hive/":  "../node_modules/be-hive/"
+                "be-hive/":  "../node_modules/be-hive/",
+                "be-vigilant/": "../node_modules/be-vigilant/"
             }
         }
     </script>
     <script type=module>
         import '../be-looking-up.js';
-        
+        import 'be-vigilant/be-vigilant.js';
     </script>
 
-<script type=module>
-    import 'https://unpkg.com/@corpuscule/custom-builtin-elements';
-    customElements.define('templ-ext', class extends HTMLTemplateElement {
-        constructor() {
-            super();
-            alert('in constructor');
-        }
 
-        connectedCallback() {
-            alert('in connectedCallback');
-        }
-    }, {extends: 'template'});
-</script>
 </body>
 </html>

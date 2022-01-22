@@ -30,7 +30,8 @@
   "devDependencies": {
     "xtal-test": "0.0.54",
     "@skypack/package-check": "0.2.2",
-    "@custom-elements-manifest/analyzer": "0.5.7"
+    "@custom-elements-manifest/analyzer": "0.5.7",
+    "be-vigilant": "0.0.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
