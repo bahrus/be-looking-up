@@ -1,6 +1,6 @@
 {
   "name": "be-looking-up",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "keywords": [
     "web-components",
     "web-component",
@@ -21,7 +21,7 @@
     "*.*"
   ],
   "types": "types.d.ts",
-  "dependencies":{
+  "dependencies": {
     "be-decorated": "0.0.64",
     "be-observant": "0.0.81",
     "be-hive": "0.0.19"
@@ -29,7 +29,7 @@
   "devDependencies": {
     "xtal-test": "0.0.54",
     "@skypack/package-check": "0.2.2",
-    "@custom-elements-manifest/analyzer": "0.5.7"  
+    "@custom-elements-manifest/analyzer": "0.5.7"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
