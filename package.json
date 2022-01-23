@@ -10,7 +10,7 @@
     "bind",
     "fetch"
   ],
-  "description": "fetch data and replace template.",
+  "description": "fetch data from a url.",
   "main": "be-looking-up.js",
   "module": "be-looking-up.js",
   "exports": {
