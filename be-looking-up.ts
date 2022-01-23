@@ -20,7 +20,7 @@ export class BeLookingUpController implements BeLookingUpActions{
             proxy.urlValEcho = urlVal;
         }, debounceDuration);
     }
-    async onUrlVal({urlVal, urlValEcho, as, proxy, fetchInProgress, baseLink, inProgressClassVal}: this): Promise<void>{
+    async onUrlVal({urlVal, urlValEcho, as, proxy, fetchInProgress, baseLink, inProgressClassVal, init}: this): Promise<void>{
         if(urlVal !== urlValEcho){ return; }
         if(this.#abortController !== undefined){
             if(fetchInProgress){
@@ -33,7 +33,8 @@ export class BeLookingUpController implements BeLookingUpActions{
             proxy.fetchInProgress = true;
             proxy.classList.add(inProgressClassVal);
         }
-        const resp = await fetch(urlVal!);
+        const url = baseLink !== undefined ? (<any>self)[baseLink].href + urlVal : urlVal;
+        const resp = await fetch(url, init);
         switch(as){
             case 'html':
                 proxy.innerHTML = await resp.text();
@@ -61,6 +62,24 @@ export class BeLookingUpController implements BeLookingUpActions{
             proxy.fetchInProgress = false;
         }
     }
+
+    onInitPartChange({methodVal, modeVal, credentialsVal, cacheVal, redirectVal, referrerPolicyVal, bodyVal, proxy, headers, contentTypeVal}: this): void{
+        const init = {
+            method: methodVal,
+            mode: modeVal,
+            credentials: credentialsVal,
+            cache: cacheVal,
+            redirect: redirectVal,
+            referrerPolicy: referrerPolicyVal,
+            body: bodyVal,
+            headers: {
+                'Content-Type': contentTypeVal!,
+                'Content-Length': bodyVal?.length,
+                ...headers,
+            }
+        };
+        proxy.init = init;
+    }
 }
 
 export interface BeLookingUpController extends BeLookingUpProps{}
@@ -80,8 +99,9 @@ define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>
             forceVisible: [upgrade],
             virtualProps: [
                 'url', 'urlVal', 'urlValEcho', 'as', 'baseLink', 'inProgressClass', 'inProgressClassVal', 
-                'method', 'methodVal', 'mode', 'credentials', 'cache', 'redirect', 
-                'referrerPolicy', 'fetchInProgress', 'debounceDuration'
+                'method', 'methodVal', 'mode', 'modeVal', 'credentials', 'credentialsVal', 'cache', 'cacheVal', 
+                'redirect', 'redirectVal',  'referrerPolicyVal', 'body', 'bodyVal', 'fetchInProgress',
+                'headers', 'init', 'contentType', 'contentTypeVal' 'authorization', 'authorizationVal',
             ],
             primaryProp: 'urlVal',
             proxyPropDefaults: {
@@ -96,6 +116,9 @@ define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>
             onUrl: 'url',
             onUrlValPre: 'urlVal',
             onUrlVal: 'urlValEcho',
+            onInitPartChange: {
+                ifKeyIn: ['methodVal', 'modeVal', 'credentialsVal', 'cacheVal', 'redirectVal', 'referrerPolicyVal', 'bodyVal', 'contentTypeVal', 'authorizationVal'],
+            }
         }
     },
     complexPropDefaults:{

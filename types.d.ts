@@ -11,6 +11,8 @@ export interface BeLookingUpVirtualProps{
     inProgressClassVal?: string,
     baseLink?: string,
     debounceDuration?: number,
+    body?: IObserve,
+    bodyVal?: any,
     method?: InterpolatingObserveParams<'GET' | 'POST' | 'PUT' | 'DELETE'>,
     methodVal?: 'GET' | 'POST' | 'PUT' | 'DELETE',
     mode?: InterpolatingObserveParams<'cors' | 'no-cors' | 'same-origin' | 'navigate'>,
@@ -22,9 +24,13 @@ export interface BeLookingUpVirtualProps{
     redirect?: 'follow' | 'error' | 'manual' | IObserve,
     redirectVal?: 'follow' | 'error' | 'manual',
     //referrer?: 'client' | 'no-referrer' | 'no-referrer-when-downgrade' | 'origin' | 'origin-when-cross-origin' | 'unsafe-url' | IObserve,
-    referrerPolicy?: 'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url' | IObserve
+    referrerPolicy?: 'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url' | IObserve,
+    referrerPolicyVal?: 'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url',
     fetchInProgress?: boolean,
     init?: RequestInit,
+    contentType?: string,
+    contentTypeVal?: string,
+    headers?: {[key: string]: string},
 }
 
 export interface BeLookingUpProps extends BeLookingUpVirtualProps{
@@ -37,5 +43,5 @@ export interface BeLookingUpActions{
     onUrlVal(self: this): Promise<void>;
     onUrlValPre(self: this): void;
     onInProgressClass(self: this): void;
-    //onInitChange(self: this): void;
+    onInitPartChange(self: this): void;
 }
