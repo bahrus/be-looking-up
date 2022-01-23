@@ -59,14 +59,15 @@ export class BeLookingUpController {
                 break;
             case 'json':
                 {
+                    const json = await resp.json();
                     if (propKey === undefined) {
-                        let templ = proxy.querySelector(`template[be-${this.#beDecorProps.ifWantsToBe}-template]`);
+                        let templ = proxy.localName === 'template' ? proxy : proxy.querySelector(`template[be-${this.#beDecorProps.ifWantsToBe}-template]`);
                         if (templ === null) {
                             templ = document.createElement('template');
                             templ.setAttribute(`be-${this.#beDecorProps.ifWantsToBe}-template`, '');
                             proxy.prepend(templ);
                         }
-                        templ.value = await resp.json();
+                        templ.value = json;
                         templ.dispatchEvent(new CustomEvent('value-changed', {
                             detail: {
                                 value: templ.value,
@@ -74,7 +75,27 @@ export class BeLookingUpController {
                         }));
                     }
                     else {
-                        proxy[propKey] = await resp.json();
+                        if (proxy.localName === 'template') {
+                            let container = proxy.closest('[itemscope]');
+                            if (container === null) {
+                                container = proxy.getRootNode().host;
+                            }
+                            if (container) {
+                                container[propKey] = json;
+                            }
+                            else {
+                                const templ = proxy;
+                                templ.value = json;
+                                templ.dispatchEvent(new CustomEvent('value-changed', {
+                                    detail: {
+                                        value: templ.value,
+                                    }
+                                }));
+                            }
+                        }
+                        else {
+                            proxy[propKey] = json;
+                        }
                     }
                 }
                 break;
@@ -89,6 +110,7 @@ export class BeLookingUpController {
             method: methodVal,
             mode: modeVal,
             credentials: credentialsVal,
+            forceVisibility: ['template'],
             cache: cacheVal,
             redirect: redirectVal,
             referrerPolicy: referrerPolicyVal,

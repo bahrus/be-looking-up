@@ -51,21 +51,40 @@ export class BeLookingUpController implements BeLookingUpActions{
                 break;
             case 'json':
                 {
+                    const json = await resp.json();
                     if(propKey === undefined){
-                        let templ = proxy.querySelector(`template[be-${this.#beDecorProps.ifWantsToBe}-template]`);
+                        let templ = proxy.localName === 'template' ? proxy : proxy.querySelector(`template[be-${this.#beDecorProps.ifWantsToBe}-template]`);
                         if(templ === null){
                             templ = document.createElement('template');
                             templ.setAttribute(`be-${this.#beDecorProps.ifWantsToBe}-template`, '');
                             proxy.prepend(templ);
                         }
-                        (<any>templ).value = await resp.json();
+                        (<any>templ).value = json;
                         templ.dispatchEvent(new CustomEvent('value-changed', {
                             detail: {
                                 value: (<any>templ).value,
                             }
                         }));
                     }else{
-                        (<any>proxy)[propKey] = await resp.json();
+                        if(proxy.localName === 'template'){
+                            let container = proxy.closest('[itemscope]') as any;
+                            if(container === null){
+                                container = (proxy.getRootNode() as any).host;
+                            }
+                            if(container){
+                                container[propKey] = json;
+                            }else{
+                                const templ = proxy;
+                                (<any>templ).value = json;
+                                templ.dispatchEvent(new CustomEvent('value-changed', {
+                                    detail: {
+                                        value: (<any>templ).value,
+                                    }
+                                }));
+                            }
+                        }else{
+                            (<any>proxy)[propKey] = json;
+                        }
                     }
                 }
 
@@ -85,6 +104,7 @@ export class BeLookingUpController implements BeLookingUpActions{
             method: methodVal,
             mode: modeVal,
             credentials: credentialsVal,
+            forceVisibility: ['template'],
             cache: cacheVal,
             redirect: redirectVal,
             referrerPolicy: referrerPolicyVal,
