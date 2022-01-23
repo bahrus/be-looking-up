@@ -94,7 +94,7 @@ define({
                 'url', 'urlVal', 'urlValEcho', 'as', 'baseLink', 'inProgressClass', 'inProgressClassVal',
                 'method', 'methodVal', 'mode', 'modeVal', 'credentials', 'credentialsVal', 'cache', 'cacheVal',
                 'redirect', 'redirectVal', 'referrerPolicyVal', 'body', 'bodyVal', 'fetchInProgress',
-                'headers', 'init', 'contentType', 'contentTypeVal', 'authorization', 'authorizationVal',
+                'headers', 'init', 'contentType', 'contentTypeVal'
             ],
             primaryProp: 'urlVal',
             proxyPropDefaults: {
@@ -110,7 +110,7 @@ define({
             onUrlValPre: 'urlVal',
             onUrlVal: 'urlValEcho',
             onInitPartChange: {
-                ifKeyIn: ['methodVal', 'modeVal', 'credentialsVal', 'cacheVal', 'redirectVal', 'referrerPolicyVal', 'bodyVal', 'contentTypeVal', 'authorizationVal'],
+                ifKeyIn: ['methodVal', 'modeVal', 'credentialsVal', 'cacheVal', 'redirectVal', 'referrerPolicyVal', 'bodyVal', 'contentTypeVal',],
             }
         }
     },
