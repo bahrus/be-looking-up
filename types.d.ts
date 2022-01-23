@@ -40,6 +40,7 @@ export interface BeLookingUpProps extends BeLookingUpVirtualProps{
 
 export interface BeLookingUpActions{
     intro(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps): void;
+    finale(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps): void;
     onMount(self: this): void;
     onUrlVal(self: this): Promise<void>;
     onUrlValPre(self: this): void;

@@ -2,12 +2,16 @@ import {register} from 'be-hive/register.js';
 import {define, BeDecoratedProps} from 'be-decorated/be-decorated.js';
 import {BeLookingUpActions, BeLookingUpVirtualProps, BeLookingUpProps} from './types';
 import {hookUp} from 'be-observant/hookUp.js';
+import { unsubscribe } from 'trans-render/lib/subscribe.js';
 
 export class BeLookingUpController implements BeLookingUpActions{
     #beDecorProps!: BeDecoratedProps;
     #abortController: AbortController | undefined;
     intro(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
         this.#beDecorProps = beDecorProps;
+    }
+    finale(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
+        unsubscribe(proxy);
     }
     onMount({url, method, mode, credentials, cache, redirect, referrerPolicy, contentType, proxy}: this): void{
         hookUp(url, proxy, 'urlVal');
@@ -156,7 +160,7 @@ define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>
                 debounceDuration: 20,
             },
             intro: 'intro',
-            //finale
+            finale: 'finale',
         },
         actions:{
             onMount: 'url',

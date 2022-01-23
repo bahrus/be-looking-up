@@ -23,9 +23,9 @@
   ],
   "types": "types.d.ts",
   "dependencies": {
-    "be-decorated": "0.0.64",
-    "be-observant": "0.0.81",
-    "be-hive": "0.0.19"
+    "be-decorated": "0.0.65",
+    "be-observant": "0.0.83",
+    "be-hive": "0.0.20"
   },
   "devDependencies": {
     "xtal-test": "0.0.54",
