@@ -8,39 +8,41 @@ Attribute-based DOM decorator/behavior equivalent of xtal-fetch.
 
 If api returns html for options, sets innerHTML to the result.  
 
-However, JSON also supported, but requires more work:
+However, JSON is also supported, but requires more work:
 
 ## Options
 
 ```html
 <label for=target>Target</label>
 <select id=target be-looking-up='{
-        "url": ["https://images-api.nasa.gov/search"],
+        "urlVal": "https://images-api.nasa.gov/search",
         "baseLink": "my-preconnect-link-id",
-        "method": "GET",
+        "methodVal": "GET",
         "headers": "...",
         "as": "json",
         "hostAdjuster": "myHostMethod",
         "cache": true,
-        "path":[
-
-        ],
-        "params": {
-            "search": ["debiaski"],
-        },
-        "templateTransform": {
-            "option": [{"textContent": "name", "value": "id"}]
-        }
+        "propKey": "items",
+        "inProgressClassVal": "fetch-in-progress",
 }'>
     <template be-looking-up-template></template>
 </select>
 ```
 
+baseLink allows the urlVal to be prepended with the href value of a link tag (ideally located in the head of the document). 
+
 What this does:
 
-Sets the value of template to the result, emits event value-changed.
+If propKey is specified, it sets the property of the element the attribute adorns to that value.
 
-params uses be-observant syntax.
+If no propKey is specified, then:
+
+1.  Searches for a template within the element it adorns with attribute be-looking-up-template.
+2.  If not found, creates a template and prepends it to the element's light children.
+3.  Adds/sets the field "value" to the JSON returned from the fetch.
+4.  Dispatches an event "value-changed" from the template.
+
+
 
 consistent syntax with be-reformable.
 

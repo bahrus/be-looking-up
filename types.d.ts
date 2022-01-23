@@ -3,11 +3,12 @@ import {IObserve, InterpolatingObserveParams} from 'be-observant/types';
 
 
 export interface BeLookingUpVirtualProps{
-    url?: InterpolatingObserveParams<string>,
+    url?: InterpolatingObserveParams,
     urlVal?: string,
     urlValEcho?: string,
-    as?: 'html' | 'json',
-    inProgressClass?: InterpolatingObserveParams<string>;
+    // as?: InterpolatingObserveParams,
+    // asVal?: 'html' | 'json' | '',
+    inProgressClass?: InterpolatingObserveParams;
     inProgressClassVal?: string,
     baseLink?: string,
     debounceDuration?: number,
@@ -17,14 +18,13 @@ export interface BeLookingUpVirtualProps{
     methodVal?: 'GET' | 'POST' | 'PUT' | 'DELETE',
     mode?: InterpolatingObserveParams<'cors' | 'no-cors' | 'same-origin' | 'navigate'>,
     modeVal?: 'cors' | 'no-cors' | 'same-origin' | 'navigate',
-    credentials?: 'omit' | 'same-origin' | 'include' | IObserve,
+    credentials?: InterpolatingObserveParams,
     credentialsVal?: 'omit' | 'same-origin' | 'include',
-    cache?: 'default' | 'no-store' | 'reload' | 'no-cache' | 'force-cache' | 'only-if-cached' | IObserve,
+    cache?: InterpolatingObserveParams,
     cacheVal?: 'default' | 'no-store' | 'reload' | 'no-cache' | 'force-cache' | 'only-if-cached',
-    redirect?: 'follow' | 'error' | 'manual' | IObserve,
+    redirect?: InterpolatingObserveParams,
     redirectVal?: 'follow' | 'error' | 'manual',
-    //referrer?: 'client' | 'no-referrer' | 'no-referrer-when-downgrade' | 'origin' | 'origin-when-cross-origin' | 'unsafe-url' | IObserve,
-    referrerPolicy?: 'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url' | IObserve,
+    referrerPolicy?: InterpolatingObserveParams,
     referrerPolicyVal?: 'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url',
     fetchInProgress?: boolean,
     init?: RequestInit,
