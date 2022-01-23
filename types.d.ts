@@ -6,8 +6,6 @@ export interface BeLookingUpVirtualProps{
     url?: InterpolatingObserveParams,
     urlVal?: string,
     urlValEcho?: string,
-    // as?: InterpolatingObserveParams,
-    // asVal?: 'html' | 'json' | '',
     inProgressClass?: InterpolatingObserveParams;
     inProgressClassVal?: string,
     baseLink?: string,
@@ -18,15 +16,16 @@ export interface BeLookingUpVirtualProps{
     methodVal?: 'GET' | 'POST' | 'PUT' | 'DELETE',
     mode?: InterpolatingObserveParams<'cors' | 'no-cors' | 'same-origin' | 'navigate'>,
     modeVal?: 'cors' | 'no-cors' | 'same-origin' | 'navigate',
-    credentials?: InterpolatingObserveParams,
+    credentials?: InterpolatingObserveParams<'omit' | 'same-origin' | 'include'>,
     credentialsVal?: 'omit' | 'same-origin' | 'include',
-    cache?: InterpolatingObserveParams,
+    cache?: InterpolatingObserveParams<'default' | 'no-store' | 'reload' | 'no-cache' | 'force-cache' | 'only-if-cached'>,
     cacheVal?: 'default' | 'no-store' | 'reload' | 'no-cache' | 'force-cache' | 'only-if-cached',
-    redirect?: InterpolatingObserveParams,
+    redirect?: InterpolatingObserveParams<'follow' | 'error' | 'manual'>,
     redirectVal?: 'follow' | 'error' | 'manual',
-    referrerPolicy?: InterpolatingObserveParams,
+    referrerPolicy?: InterpolatingObserveParams<'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url'>,
     referrerPolicyVal?: 'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url',
     fetchInProgress?: boolean,
+    propKey?: string,
     init?: RequestInit,
     contentType?: string,
     contentTypeVal?: string,
@@ -39,9 +38,9 @@ export interface BeLookingUpProps extends BeLookingUpVirtualProps{
 
 export interface BeLookingUpActions{
     intro(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps): void;
-    onUrl(self: this): void;
+    onMount(self: this): void;
     onUrlVal(self: this): Promise<void>;
     onUrlValPre(self: this): void;
     onInProgressClass(self: this): void;
-    onInitPartChange(self: this): void;
+    onInitPartChange(self: this): {init: RequestInit};
 }

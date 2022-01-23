@@ -7,8 +7,22 @@ export class BeLookingUpController {
     intro(proxy, target, beDecorProps) {
         this.#beDecorProps = beDecorProps;
     }
-    onUrl({ url, proxy }) {
+    onMount({ url, method, mode, credentials, cache, redirect, referrerPolicy, contentType, proxy }) {
         hookUp(url, proxy, 'urlVal');
+        if (method !== undefined)
+            hookUp(method, proxy, 'methodVal');
+        if (mode !== undefined)
+            hookUp(mode, proxy, 'modeVal');
+        if (credentials !== undefined)
+            hookUp(credentials, proxy, 'credentialsVal');
+        if (cache !== undefined)
+            hookUp(cache, proxy, 'cacheVal');
+        if (redirect !== undefined)
+            hookUp(redirect, proxy, 'redirectVal');
+        if (referrerPolicy !== undefined)
+            hookUp(referrerPolicy, proxy, 'referrerPolicyVal');
+        if (contentType !== undefined)
+            hookUp(contentType, proxy, 'contentTypeVal');
     }
     onInProgressClass({ inProgressClass, proxy }) {
         hookUp(inProgressClass, proxy, 'inProgressClassVal');
@@ -18,7 +32,7 @@ export class BeLookingUpController {
             proxy.urlValEcho = urlVal;
         }, debounceDuration);
     }
-    async onUrlVal({ urlVal, urlValEcho, proxy, fetchInProgress, baseLink, inProgressClassVal, init }) {
+    async onUrlVal({ urlVal, urlValEcho, propKey, proxy, fetchInProgress, baseLink, inProgressClassVal, init }) {
         if (urlVal !== urlValEcho) {
             return;
         }
@@ -45,18 +59,23 @@ export class BeLookingUpController {
                 break;
             case 'json':
                 {
-                    let templ = proxy.querySelector(`template[be-${this.#beDecorProps.ifWantsToBe}-template]`);
-                    if (templ === null) {
-                        templ = document.createElement('template');
-                        templ.setAttribute(`be-${this.#beDecorProps.ifWantsToBe}-template`, '');
-                        proxy.prepend(templ);
-                    }
-                    templ.value = await resp.json();
-                    templ.dispatchEvent(new CustomEvent('value-changed', {
-                        detail: {
-                            value: templ.value,
+                    if (propKey === undefined) {
+                        let templ = proxy.querySelector(`template[be-${this.#beDecorProps.ifWantsToBe}-template]`);
+                        if (templ === null) {
+                            templ = document.createElement('template');
+                            templ.setAttribute(`be-${this.#beDecorProps.ifWantsToBe}-template`, '');
+                            proxy.prepend(templ);
                         }
-                    }));
+                        templ.value = await resp.json();
+                        templ.dispatchEvent(new CustomEvent('value-changed', {
+                            detail: {
+                                value: templ.value,
+                            }
+                        }));
+                    }
+                    else {
+                        proxy[propKey] = await resp.json();
+                    }
                 }
                 break;
         }
@@ -80,7 +99,7 @@ export class BeLookingUpController {
                 ...headers,
             }
         };
-        proxy.init = init;
+        return { init };
     }
 }
 const tagName = 'be-looking-up';
@@ -94,10 +113,18 @@ define({
             ifWantsToBe,
             forceVisible: [upgrade],
             virtualProps: [
-                'url', 'urlVal', 'urlValEcho', 'baseLink', 'inProgressClass', 'inProgressClassVal',
-                'method', 'methodVal', 'mode', 'modeVal', 'credentials', 'credentialsVal', 'cache', 'cacheVal',
-                'redirect', 'redirectVal', 'referrerPolicyVal', 'body', 'bodyVal', 'fetchInProgress',
-                'headers', 'init', 'contentType', 'contentTypeVal'
+                'url', 'urlVal', 'urlValEcho', 'baseLink',
+                'inProgressClass', 'inProgressClassVal',
+                'method', 'methodVal',
+                'mode', 'modeVal',
+                'credentials', 'credentialsVal',
+                'cache', 'cacheVal',
+                'redirect', 'redirectVal',
+                'referrerPolicy', 'referrerPolicyVal',
+                'body', 'bodyVal', 'fetchInProgress',
+                'headers', 'init',
+                'contentType', 'contentTypeVal',
+                'propKey'
             ],
             primaryProp: 'urlVal',
             proxyPropDefaults: {
@@ -108,9 +135,12 @@ define({
             //finale
         },
         actions: {
-            onUrl: 'url',
+            onMount: 'url',
             onUrlValPre: 'urlVal',
-            onUrlVal: 'urlValEcho',
+            onUrlVal: {
+                ifAllOf: ['urlValEcho'],
+                ifKeyIn: ['init']
+            },
             onInitPartChange: {
                 ifKeyIn: ['methodVal', 'modeVal', 'credentialsVal', 'cacheVal', 'redirectVal', 'referrerPolicyVal', 'bodyVal', 'contentTypeVal',],
             }
