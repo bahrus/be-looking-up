@@ -18,7 +18,7 @@ export class BeLookingUpController {
             proxy.urlValEcho = urlVal;
         }, debounceDuration);
     }
-    async onUrlVal({ urlVal, urlValEcho, as, proxy, fetchInProgress, baseLink, inProgressClassVal, init }) {
+    async onUrlVal({ urlVal, urlValEcho, proxy, fetchInProgress, baseLink, inProgressClassVal, init }) {
         if (urlVal !== urlValEcho) {
             return;
         }
@@ -36,6 +36,9 @@ export class BeLookingUpController {
         }
         const url = baseLink !== undefined ? self[baseLink].href + urlVal : urlVal;
         const resp = await fetch(url, init);
+        const respContentType = resp.headers.get('Content-Type');
+        const as = respContentType === null ? 'html' :
+            respContentType.includes('json') ? 'json' : 'html';
         switch (as) {
             case 'html':
                 proxy.innerHTML = await resp.text();
@@ -91,14 +94,13 @@ define({
             ifWantsToBe,
             forceVisible: [upgrade],
             virtualProps: [
-                'url', 'urlVal', 'urlValEcho', 'as', 'baseLink', 'inProgressClass', 'inProgressClassVal',
+                'url', 'urlVal', 'urlValEcho', 'baseLink', 'inProgressClass', 'inProgressClassVal',
                 'method', 'methodVal', 'mode', 'modeVal', 'credentials', 'credentialsVal', 'cache', 'cacheVal',
                 'redirect', 'redirectVal', 'referrerPolicyVal', 'body', 'bodyVal', 'fetchInProgress',
                 'headers', 'init', 'contentType', 'contentTypeVal'
             ],
             primaryProp: 'urlVal',
             proxyPropDefaults: {
-                as: 'html',
                 fetchInProgress: false,
                 debounceDuration: 20,
             },
