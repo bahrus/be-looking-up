@@ -77,7 +77,10 @@ export class BeLookingUpController implements BeLookingUpActions{
         }
     }
 
-    onInitPartChange({methodVal, modeVal, credentialsVal, cacheVal, redirectVal, referrerPolicyVal, bodyVal, proxy, headers, contentTypeVal}: this): {init: RequestInit} {
+    onInitPartChange({
+        methodVal, modeVal, credentialsVal, cacheVal, redirectVal, referrerPolicyVal, bodyVal, 
+        headers, contentTypeVal, authorizationVal
+    }: this): {init: RequestInit} {
         const init = {
             method: methodVal,
             mode: modeVal,
@@ -89,6 +92,7 @@ export class BeLookingUpController implements BeLookingUpActions{
             headers: {
                 'Content-Type': contentTypeVal!,
                 'Content-Length': bodyVal?.length,
+                'authorization': authorizationVal!,
                 ...headers,
             }
         };
@@ -123,6 +127,7 @@ define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>
                 'body', 'bodyVal', 'fetchInProgress',
                 'headers', 'init', 
                 'contentType', 'contentTypeVal', 
+                'authorization', 'authorizationVal',
                 'propKey'
             ],
             primaryProp: 'urlVal',
@@ -141,7 +146,7 @@ define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>
                 ifKeyIn: ['init']
             },
             onInitPartChange: {
-                ifKeyIn: ['methodVal', 'modeVal', 'credentialsVal', 'cacheVal', 'redirectVal', 'referrerPolicyVal', 'bodyVal', 'contentTypeVal',],
+                ifKeyIn: ['methodVal', 'modeVal', 'credentialsVal', 'cacheVal', 'redirectVal', 'referrerPolicyVal', 'bodyVal', 'contentTypeVal', 'authorizationVal'],
             }
         }
     },

@@ -27,8 +27,10 @@ export interface BeLookingUpVirtualProps{
     fetchInProgress?: boolean,
     propKey?: string,
     init?: RequestInit,
-    contentType?: string,
+    contentType?: InterpolatingObserveParams,
     contentTypeVal?: string,
+    authorization?: InterpolatingObserveParams,
+    authorizationVal?: string,
     headers?: {[key: string]: string},
 }
 
