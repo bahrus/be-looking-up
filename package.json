@@ -23,15 +23,15 @@
   ],
   "types": "types.d.ts",
   "dependencies": {
-    "be-decorated": "0.0.88",
-    "be-observant": "0.0.100",
-    "be-hive": "0.0.35"
+    "be-decorated": "0.0.89",
+    "be-observant": "0.0.101",
+    "be-hive": "0.0.36"
   },
   "devDependencies": {
     "xtal-test": "0.0.55",
     "@skypack/package-check": "0.2.2",
     "@custom-elements-manifest/analyzer": "0.5.7",
-    "be-vigilant": "0.0.8"
+    "be-vigilant": "0.0.9"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
