@@ -42,6 +42,11 @@
         import 'be-vigilant/be-vigilant.js';
     </script>
 
+    <script>
+        composers2.addEventListener('looking-up::value-changed', e => {
+            console.log(e.detail);
+        });
+    </script>
 
 </body>
 </html>
