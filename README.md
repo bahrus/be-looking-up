@@ -1,6 +1,6 @@
-# be-looking-up [WIP]
+# be-looking-up
 
-Attribute-based DOM decorator/behavior equivalent of xtal-fetch.
+Attribute-based DOM decorator/behavior equivalent of [xtal-fetch](https://github.com/bahrus/xtal-fetch).
 
 ```html
 <select be-looking-up=https://images-api.nasa.gov/search?debiaski></select>
@@ -28,15 +28,12 @@ It also emits event: "looking-up::value-changed"
             "...": "..."
         },
         "cacheVal": "no-store",
-        "propKey": "items",
         "inProgressClassVal": "fetch-in-progress",
-}'>
-    <template be-looking-up-template></template>
+}'>    
 </select>
 ```
 
-baseLink allows the urlVal to be prepended with the href value of a link tag (ideally located in the head of the index.html, typically). 
-
+baseLink allows the urlVal to be prepended with the href value of a link tag (ideally located in the head of index.html, typically). 
 
 ## Authentication
 

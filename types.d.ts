@@ -24,7 +24,6 @@ export interface BeLookingUpEndUserProps{
     redirectVal?: 'follow' | 'error' | 'manual',
     referrerPolicy?: InterpolatingObserveParams<'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url'>,
     referrerPolicyVal?: 'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url',
-    propKey?: string,
     init?: RequestInit,
     contentType?: InterpolatingObserveParams,
     contentTypeVal?: string,
