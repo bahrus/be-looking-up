@@ -54,44 +54,7 @@ export class BeLookingUpController implements BeLookingUpActions{
                 proxy.innerHTML = await resp.text();
                 break;
             case 'json':
-                {
-                    const json = await resp.json();
-                    if(propKey === undefined){
-                        let templ = proxy.localName === 'template' ? proxy : proxy.querySelector(`template[be-${this.#beDecorProps.ifWantsToBe}-template]`);
-                        if(templ === null){
-                            templ = document.createElement('template');
-                            templ.setAttribute(`be-${this.#beDecorProps.ifWantsToBe}-template`, '');
-                            proxy.prepend(templ);
-                        }
-                        (<any>templ).value = json;
-                        templ.dispatchEvent(new CustomEvent('value-changed', {
-                            detail: {
-                                value: (<any>templ).value,
-                            }
-                        }));
-                    }else{
-                        if(proxy.localName === 'template'){
-                            let container = proxy.closest('[itemscope]') as any;
-                            if(container === null){
-                                container = (proxy.getRootNode() as any).host;
-                            }
-                            if(container){
-                                container[propKey] = json;
-                            }else{
-                                const templ = proxy;
-                                (<any>templ).value = json;
-                                templ.dispatchEvent(new CustomEvent('value-changed', {
-                                    detail: {
-                                        value: (<any>templ).value,
-                                    }
-                                }));
-                            }
-                        }else{
-                            (<any>proxy)[propKey] = json;
-                        }
-                    }
-                }
-
+                proxy.value = await resp.json();
                 break;
         }
         if(inProgressClassVal){
@@ -152,7 +115,7 @@ define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>
                 'headers', 'init', 
                 'contentType', 'contentTypeVal', 
                 'authorization', 'authorizationVal',
-                'propKey'
+                'propKey', 'value'
             ],
             primaryProp: 'urlVal',
             proxyPropDefaults: {
@@ -161,6 +124,7 @@ define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>
             },
             intro: 'intro',
             finale: 'finale',
+            emitEvents: ['value', 'fetchInProgress'],
         },
         actions:{
             onMount: 'url',

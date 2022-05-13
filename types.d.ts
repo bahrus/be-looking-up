@@ -2,7 +2,7 @@ import {BeDecoratedProps, EventHandler} from 'be-decorated/types';
 import {IObserve, InterpolatingObserveParams} from 'be-observant/types';
 
 
-export interface BeLookingUpVirtualProps{
+export interface BeLookingUpEndUserProps{
     url?: InterpolatingObserveParams,
     urlVal?: string,
     urlValEcho?: string,
@@ -24,7 +24,6 @@ export interface BeLookingUpVirtualProps{
     redirectVal?: 'follow' | 'error' | 'manual',
     referrerPolicy?: InterpolatingObserveParams<'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url'>,
     referrerPolicyVal?: 'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url',
-    fetchInProgress?: boolean,
     propKey?: string,
     init?: RequestInit,
     contentType?: InterpolatingObserveParams,
@@ -32,6 +31,11 @@ export interface BeLookingUpVirtualProps{
     authorization?: InterpolatingObserveParams,
     authorizationVal?: string,
     headers?: {[key: string]: string},
+}
+
+export interface BeLookingUpVirtualProps extends BeLookingUpEndUserProps{
+    fetchInProgress?: boolean,
+    value?: any,
 }
 
 export interface BeLookingUpProps extends BeLookingUpVirtualProps{
