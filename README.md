@@ -6,15 +6,19 @@ Attribute-based DOM decorator/behavior equivalent of [xtal-fetch](https://github
 <select be-looking-up=https://images-api.nasa.gov/search?debiaski></select>
 ```
 
-If api returns html for options, sets innerHTML to the result.  
+If api returns html for options, sets innerHTML to the result.  Easy peasy
 
-However, JSON is also supported.  It just sets:
+However, JSON is also supported, but it takes a bit more work for anything of interest to come from it.  be-looking-up just sets:
 
 ```JavaScript
 oSelect.beDecorated.lookingUp.value = json;
 ```
 
 It also emits event: "looking-up::value-changed"
+
+A template inside the select element can be adorned with the [be-repeated](https://github.com/bahrus/be-repeated), which can "look up" to the select element and listen for the json value to change, and generate the options.
+
+However, because the select element hides elements contained within, and be-decorated based decorators / behaviors such as be-looking-up and be-repeated require being seen in order to be heard, the select element will also need to be adorned by [be-vigilant](https://github.com/bahrus/be-vigilant).
 
 ## Options for Restful JSON service
 

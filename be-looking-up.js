@@ -36,7 +36,7 @@ export class BeLookingUpController {
             proxy.urlValEcho = urlVal;
         }, debounceDuration);
     }
-    async onUrlVal({ urlVal, urlValEcho, propKey, proxy, fetchInProgress, baseLink, inProgressClassVal, init }) {
+    async onUrlVal({ urlVal, urlValEcho, proxy, fetchInProgress, baseLink, inProgressClassVal, init }) {
         if (urlVal !== urlValEcho) {
             return;
         }
@@ -113,7 +113,7 @@ define({
                 'headers', 'init',
                 'contentType', 'contentTypeVal',
                 'authorization', 'authorizationVal',
-                'propKey', 'value'
+                'value', 'debounceDuration',
             ],
             primaryProp: 'urlVal',
             proxyPropDefaults: {
