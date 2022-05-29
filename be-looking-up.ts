@@ -10,9 +10,7 @@ export class BeLookingUpController implements BeLookingUpActions{
     intro(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
         this.#beDecorProps = beDecorProps;
     }
-    finale(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
-        unsubscribe(proxy);
-    }
+
     onMount({url, method, mode, credentials, cache, redirect, referrerPolicy, contentType, proxy}: this): void{
         hookUp(url, proxy, 'urlVal');
         if(method !== undefined) hookUp(method, proxy, 'methodVal');
@@ -64,8 +62,8 @@ export class BeLookingUpController implements BeLookingUpActions{
     }
 
     onInitPartChange({
-        methodVal, modeVal, credentialsVal, cacheVal, redirectVal, referrerPolicyVal, bodyVal, 
-        headers, contentTypeVal, authorizationVal
+        proxy, methodVal, modeVal, credentialsVal, cacheVal, redirectVal, referrerPolicyVal, bodyVal, 
+        headers, contentTypeVal, authorizationVal, headerFormSelector
     }: this): {init: RequestInit} {
         const init = {
             method: methodVal,
@@ -82,8 +80,45 @@ export class BeLookingUpController implements BeLookingUpActions{
                 'authorization': authorizationVal!,
                 ...headers,
             }
-        };
+        } as RequestInit;
+        if(headerFormSelector !== undefined){
+            const headerForm = (proxy.getRootNode() as DocumentFragment).querySelector(headerFormSelector!) as HTMLFormElement;
+            if(headerForm === null) throw '404';
+            const elements = headerForm.elements;
+            for(const input of elements){
+                const inputT = input as HTMLInputElement;
+                if(inputT.name){
+                    (<any>init.headers!)[inputT.name] = inputT.value;
+                }
+            }
+        }
+
         return {init};
+    }
+
+    handleHeaderChange = () => {
+        this.onInitPartChange(this);
+    }
+
+    async onHeaderFormSubmitOn({headerFormSubmitOn, proxy, headerFormSelector}: this) {
+        const on = typeof headerFormSubmitOn === 'string' ? [headerFormSubmitOn!] : headerFormSubmitOn!;
+        const headerForm = (proxy.getRootNode() as DocumentFragment).querySelector(headerFormSelector!) as HTMLFormElement;
+        if(headerForm === null) throw '404';
+        for(const key of on){
+            headerForm.addEventListener(key, this.handleHeaderChange);
+        }
+        this.handleHeaderChange();
+    }
+
+    finale(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
+        const {headerFormSubmitOn} = proxy;
+        if(headerFormSubmitOn !== undefined){
+            const on = typeof headerFormSubmitOn === 'string' ? [headerFormSubmitOn!] : headerFormSubmitOn!;
+            for(const key of on){
+                proxy.removeEventListener(key, this.handleHeaderChange);
+            }
+        }
+        unsubscribe(proxy);
     }
 }
 
@@ -115,7 +150,7 @@ define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>
                 'headers', 'init', 
                 'contentType', 'contentTypeVal', 
                 'authorization', 'authorizationVal',
-                'value', 'debounceDuration',
+                'value', 'debounceDuration', 'headerFormSelector', 'headerFormSubmitOn'
             ],
             primaryProp: 'urlVal',
             proxyPropDefaults: {
@@ -135,6 +170,9 @@ define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>
             },
             onInitPartChange: {
                 ifKeyIn: ['methodVal', 'modeVal', 'credentialsVal', 'cacheVal', 'redirectVal', 'referrerPolicyVal', 'bodyVal', 'contentTypeVal', 'authorizationVal'],
+            },
+            onHeaderFormSubmitOn: {
+                ifAllOf: ['headerFormSubmitOn', 'headerFormSelector'],
             }
         }
     },

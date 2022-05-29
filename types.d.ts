@@ -30,6 +30,8 @@ export interface BeLookingUpEndUserProps{
     authorization?: InterpolatingObserveParams,
     authorizationVal?: string,
     headers?: {[key: string]: string},
+    headerFormSelector?: string,
+    headerFormSubmitOn?: string | string[],
 }
 
 export interface BeLookingUpVirtualProps extends BeLookingUpEndUserProps{
@@ -49,4 +51,5 @@ export interface BeLookingUpActions{
     onUrlValPre(self: this): void;
     onInProgressClass(self: this): void;
     onInitPartChange(self: this): {init: RequestInit};
+    onHeaderFormSubmitOn(self: this): void;
 }

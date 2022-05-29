@@ -8,9 +8,6 @@ export class BeLookingUpController {
     intro(proxy, target, beDecorProps) {
         this.#beDecorProps = beDecorProps;
     }
-    finale(proxy, target, beDecorProps) {
-        unsubscribe(proxy);
-    }
     onMount({ url, method, mode, credentials, cache, redirect, referrerPolicy, contentType, proxy }) {
         hookUp(url, proxy, 'urlVal');
         if (method !== undefined)
@@ -70,7 +67,7 @@ export class BeLookingUpController {
             proxy.fetchInProgress = false;
         }
     }
-    onInitPartChange({ methodVal, modeVal, credentialsVal, cacheVal, redirectVal, referrerPolicyVal, bodyVal, headers, contentTypeVal, authorizationVal }) {
+    onInitPartChange({ proxy, methodVal, modeVal, credentialsVal, cacheVal, redirectVal, referrerPolicyVal, bodyVal, headers, contentTypeVal, authorizationVal, headerFormSelector }) {
         const init = {
             method: methodVal,
             mode: modeVal,
@@ -87,7 +84,42 @@ export class BeLookingUpController {
                 ...headers,
             }
         };
+        if (headerFormSelector !== undefined) {
+            const headerForm = proxy.getRootNode().querySelector(headerFormSelector);
+            if (headerForm === null)
+                throw '404';
+            const elements = headerForm.elements;
+            for (const input of elements) {
+                const inputT = input;
+                if (inputT.name) {
+                    init.headers[inputT.name] = inputT.value;
+                }
+            }
+        }
         return { init };
+    }
+    handleHeaderChange = () => {
+        this.onInitPartChange(this);
+    };
+    async onHeaderFormSubmitOn({ headerFormSubmitOn, proxy, headerFormSelector }) {
+        const on = typeof headerFormSubmitOn === 'string' ? [headerFormSubmitOn] : headerFormSubmitOn;
+        const headerForm = proxy.getRootNode().querySelector(headerFormSelector);
+        if (headerForm === null)
+            throw '404';
+        for (const key of on) {
+            headerForm.addEventListener(key, this.handleHeaderChange);
+        }
+        this.handleHeaderChange();
+    }
+    finale(proxy, target, beDecorProps) {
+        const { headerFormSubmitOn } = proxy;
+        if (headerFormSubmitOn !== undefined) {
+            const on = typeof headerFormSubmitOn === 'string' ? [headerFormSubmitOn] : headerFormSubmitOn;
+            for (const key of on) {
+                proxy.removeEventListener(key, this.handleHeaderChange);
+            }
+        }
+        unsubscribe(proxy);
     }
 }
 const tagName = 'be-looking-up';
@@ -113,7 +145,7 @@ define({
                 'headers', 'init',
                 'contentType', 'contentTypeVal',
                 'authorization', 'authorizationVal',
-                'value', 'debounceDuration',
+                'value', 'debounceDuration', 'headerFormSelector', 'headerFormSubmitOn'
             ],
             primaryProp: 'urlVal',
             proxyPropDefaults: {
@@ -133,6 +165,9 @@ define({
             },
             onInitPartChange: {
                 ifKeyIn: ['methodVal', 'modeVal', 'credentialsVal', 'cacheVal', 'redirectVal', 'referrerPolicyVal', 'bodyVal', 'contentTypeVal', 'authorizationVal'],
+            },
+            onHeaderFormSubmitOn: {
+                ifAllOf: ['headerFormSubmitOn', 'headerFormSelector'],
             }
         }
     },
