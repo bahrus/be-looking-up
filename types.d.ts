@@ -1,8 +1,8 @@
-import {BeDecoratedProps, EventHandler} from 'be-decorated/types';
+import {BeDecoratedProps, EventHandler, MinimalProxy} from 'be-decorated/types';
 import {IObserve, InterpolatingObserveParams} from 'be-observant/types';
 
 
-export interface BeLookingUpEndUserProps{
+export interface EndUserProps{
     url?: InterpolatingObserveParams,
     urlVal?: string,
     urlValEcho?: string,
@@ -34,22 +34,26 @@ export interface BeLookingUpEndUserProps{
     headerFormSubmitOn?: string | string[],
 }
 
-export interface BeLookingUpVirtualProps extends BeLookingUpEndUserProps{
+export interface VirtualProps extends EndUserProps, MinimalProxy{
     fetchInProgress?: boolean,
     value?: any,
 }
 
-export interface BeLookingUpProps extends BeLookingUpVirtualProps{
-    proxy: Element & BeLookingUpVirtualProps;
+export type Proxy = Element & VirtualProps;
+
+export interface ProxyProps extends VirtualProps{
+    proxy: Proxy;
 }
 
-export interface BeLookingUpActions{
-    intro(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps): void;
-    finale(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps): void;
-    onMount(self: this): void;
-    onUrlVal(self: this): Promise<void>;
-    onUrlValPre(self: this): void;
-    onInProgressClass(self: this): void;
-    onInitPartChange(self: this): {init: RequestInit};
-    onHeaderFormSubmitOn(self: this): void;
+export type PP = ProxyProps;
+
+export interface Actions{
+    intro(proxy: Proxy, target: Element, beDecorProps: BeDecoratedProps): void;
+    finale(proxy: Proxy, target: Element, beDecorProps: BeDecoratedProps): void;
+    onMount(self: PP): void;
+    onUrlVal(self: PP): Promise<void>;
+    onUrlValPre(self: PP): void;
+    onInProgressClass(self: PP): void;
+    onInitPartChange(self: PP): {init: RequestInit};
+    onHeaderFormSubmitOn(self: PP): void;
 }

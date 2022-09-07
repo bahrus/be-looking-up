@@ -1,17 +1,17 @@
 import {register} from 'be-hive/register.js';
 import {define, BeDecoratedProps} from 'be-decorated/be-decorated.js';
-import {BeLookingUpActions, BeLookingUpVirtualProps, BeLookingUpProps} from './types';
+import {Actions, VirtualProps, Proxy, PP} from './types';
 import {hookUp} from 'be-observant/hookUp.js';
 import { unsubscribe } from 'trans-render/lib/subscribe.js';
 
-export class BeLookingUpController implements BeLookingUpActions{
+export class BeLookingUpController implements Actions{
     #beDecorProps!: BeDecoratedProps;
     #abortController: AbortController | undefined;
-    intro(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
+    intro(proxy: Proxy, target: Element, beDecorProps: BeDecoratedProps){
         this.#beDecorProps = beDecorProps;
     }
 
-    onMount({url, method, mode, credentials, cache, redirect, referrerPolicy, contentType, proxy}: this): void{
+    onMount({url, method, mode, credentials, cache, redirect, referrerPolicy, contentType, proxy}: PP): void{
         hookUp(url, proxy, 'urlVal');
         if(method !== undefined) hookUp(method, proxy, 'methodVal');
         if(mode !== undefined) hookUp(mode, proxy, 'modeVal');
@@ -21,15 +21,15 @@ export class BeLookingUpController implements BeLookingUpActions{
         if(referrerPolicy !== undefined) hookUp(referrerPolicy, proxy, 'referrerPolicyVal');
         if(contentType !== undefined) hookUp(contentType, proxy, 'contentTypeVal');
     }
-    onInProgressClass({inProgressClass, proxy}: this): void {
+    onInProgressClass({inProgressClass, proxy}: PP): void {
         hookUp(inProgressClass, proxy, 'inProgressClassVal');
     }
-    async onUrlValPre({urlVal, proxy, debounceDuration}: this){
+    async onUrlValPre({urlVal, proxy, debounceDuration}: PP){
         setTimeout(() => {
             proxy.urlValEcho = urlVal;
         }, debounceDuration);
     }
-    async onUrlVal({urlVal, urlValEcho, proxy, fetchInProgress, baseLink, inProgressClassVal, init}: this): Promise<void>{
+    async onUrlVal({urlVal, urlValEcho, proxy, fetchInProgress, baseLink, inProgressClassVal, init}: PP): Promise<void>{
         if(urlVal !== urlValEcho){ return; }
         if(this.#abortController !== undefined){
             if(fetchInProgress){
@@ -64,7 +64,7 @@ export class BeLookingUpController implements BeLookingUpActions{
     onInitPartChange({
         proxy, methodVal, modeVal, credentialsVal, cacheVal, redirectVal, referrerPolicyVal, bodyVal, 
         headers, contentTypeVal, authorizationVal, headerFormSelector
-    }: this): {init: RequestInit} {
+    }: PP): {init: RequestInit} {
         const init = {
             method: methodVal,
             mode: modeVal,
@@ -96,33 +96,39 @@ export class BeLookingUpController implements BeLookingUpActions{
         return {init};
     }
 
-    handleHeaderChange = () => {
-        this.onInitPartChange(this);
+    handleHeaderChange(pp: PP){
+        this.onInitPartChange(pp);
     }
 
-    async onHeaderFormSubmitOn({headerFormSubmitOn, proxy, headerFormSelector}: this) {
+    #headerFormAbortController : AbortController[] = [];
+    async onHeaderFormSubmitOn(pp: PP) {
+        const {headerFormSubmitOn, proxy, headerFormSelector} = pp;
+        this.disconnect();
+        this.#headerFormAbortController = [];
         const on = typeof headerFormSubmitOn === 'string' ? [headerFormSubmitOn!] : headerFormSubmitOn!;
         const headerForm = (proxy.getRootNode() as DocumentFragment).querySelector(headerFormSelector!) as HTMLFormElement;
         if(headerForm === null) throw '404';
         for(const key of on){
-            headerForm.addEventListener(key, this.handleHeaderChange);
+            const ac = new AbortController();
+            headerForm.addEventListener(key, e => {
+                this.handleHeaderChange(pp);
+            }, {signal: ac.signal});
         }
-        this.handleHeaderChange();
+        this.handleHeaderChange(pp);
     }
 
-    finale(proxy: Element & BeLookingUpVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
-        const {headerFormSubmitOn} = proxy;
-        if(headerFormSubmitOn !== undefined){
-            const on = typeof headerFormSubmitOn === 'string' ? [headerFormSubmitOn!] : headerFormSubmitOn!;
-            for(const key of on){
-                proxy.removeEventListener(key, this.handleHeaderChange);
-            }
+    disconnect(){
+        for(const ac of this.#headerFormAbortController){
+            ac.abort();
         }
+    }
+
+    finale(proxy: Proxy, target: Element, beDecorProps: BeDecoratedProps){
+        this.disconnect();
         unsubscribe(proxy);
     }
 }
 
-export interface BeLookingUpController extends BeLookingUpProps{}
 
 const tagName = 'be-looking-up';
 
@@ -130,7 +136,7 @@ const ifWantsToBe = 'looking-up';
 
 const upgrade = '*';
 
-define<BeLookingUpProps & BeDecoratedProps<BeLookingUpProps, BeLookingUpActions>, BeLookingUpActions>({
+define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
     config:{
         tagName,
         propDefaults:{

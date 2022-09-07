@@ -98,27 +98,33 @@ export class BeLookingUpController {
         }
         return { init };
     }
-    handleHeaderChange = () => {
-        this.onInitPartChange(this);
-    };
-    async onHeaderFormSubmitOn({ headerFormSubmitOn, proxy, headerFormSelector }) {
+    handleHeaderChange(pp) {
+        this.onInitPartChange(pp);
+    }
+    #headerFormAbortController = [];
+    async onHeaderFormSubmitOn(pp) {
+        const { headerFormSubmitOn, proxy, headerFormSelector } = pp;
+        this.disconnect();
+        this.#headerFormAbortController = [];
         const on = typeof headerFormSubmitOn === 'string' ? [headerFormSubmitOn] : headerFormSubmitOn;
         const headerForm = proxy.getRootNode().querySelector(headerFormSelector);
         if (headerForm === null)
             throw '404';
         for (const key of on) {
-            headerForm.addEventListener(key, this.handleHeaderChange);
+            const ac = new AbortController();
+            headerForm.addEventListener(key, e => {
+                this.handleHeaderChange(pp);
+            }, { signal: ac.signal });
         }
-        this.handleHeaderChange();
+        this.handleHeaderChange(pp);
+    }
+    disconnect() {
+        for (const ac of this.#headerFormAbortController) {
+            ac.abort();
+        }
     }
     finale(proxy, target, beDecorProps) {
-        const { headerFormSubmitOn } = proxy;
-        if (headerFormSubmitOn !== undefined) {
-            const on = typeof headerFormSubmitOn === 'string' ? [headerFormSubmitOn] : headerFormSubmitOn;
-            for (const key of on) {
-                proxy.removeEventListener(key, this.handleHeaderChange);
-            }
-        }
+        this.disconnect();
         unsubscribe(proxy);
     }
 }
