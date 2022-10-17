@@ -1,33 +1,33 @@
 import {BeDecoratedProps, EventHandler, MinimalProxy} from 'be-decorated/types';
-import {IObserve, InterpolatingObserveParams} from 'be-observant/types';
+import {IObserve} from 'be-observant/types';
 
 
 export interface EndUserProps{
-    url?: InterpolatingObserveParams,
+    url?: IObserve,
     urlVal?: string,
     urlValEcho?: string,
-    inProgressClass?: InterpolatingObserveParams;
+    inProgressClass?: IObserve;
     inProgressClassVal?: string,
     baseLink?: string,
     debounceDuration?: number,
     body?: IObserve,
     bodyVal?: any,
-    method?: InterpolatingObserveParams<'GET' | 'POST' | 'PUT' | 'DELETE'>,
+    method?: IObserve<'GET' | 'POST' | 'PUT' | 'DELETE'>,
     methodVal?: 'GET' | 'POST' | 'PUT' | 'DELETE',
-    mode?: InterpolatingObserveParams<'cors' | 'no-cors' | 'same-origin' | 'navigate'>,
+    mode?: IObserve<'cors' | 'no-cors' | 'same-origin' | 'navigate'>,
     modeVal?: 'cors' | 'no-cors' | 'same-origin' | 'navigate',
-    credentials?: InterpolatingObserveParams<'omit' | 'same-origin' | 'include'>,
+    credentials?: IObserve<'omit' | 'same-origin' | 'include'>,
     credentialsVal?: 'omit' | 'same-origin' | 'include',
-    cache?: InterpolatingObserveParams<'default' | 'no-store' | 'reload' | 'no-cache' | 'force-cache' | 'only-if-cached'>,
+    cache?: IObserve<'default' | 'no-store' | 'reload' | 'no-cache' | 'force-cache' | 'only-if-cached'>,
     cacheVal?: 'default' | 'no-store' | 'reload' | 'no-cache' | 'force-cache' | 'only-if-cached',
-    redirect?: InterpolatingObserveParams<'follow' | 'error' | 'manual'>,
+    redirect?: IObserve<'follow' | 'error' | 'manual'>,
     redirectVal?: 'follow' | 'error' | 'manual',
-    referrerPolicy?: InterpolatingObserveParams<'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url'>,
+    referrerPolicy?: IObserve<'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url'>,
     referrerPolicyVal?: 'no-referrer' |  'no-referrer-when-downgrade' | 'same-origin' | 'origin' | 'strict-origin' |  'origin-when-cross-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url',
     init?: RequestInit,
-    contentType?: InterpolatingObserveParams,
+    contentType?: IObserve,
     contentTypeVal?: string,
-    authorization?: InterpolatingObserveParams,
+    authorization?: IObserve,
     authorizationVal?: string,
     headers?: {[key: string]: string},
     headerFormSelector?: string,

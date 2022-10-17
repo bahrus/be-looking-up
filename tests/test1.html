@@ -16,7 +16,7 @@
         "urlVal": "./composers.json",
         "as": "json"
     }'></select>
-
+    <div id=target></div>
     <!-- <label for=composers3>Composers</label>
     <select name=composers3 id=composers3 be-vigilant>
         <template be-looking-up=./composers.html></template>
@@ -44,8 +44,8 @@
     </script>
 
     <script>
-        composers2.addEventListener('looking-up::value-changed', e => {
-            console.log(e.detail);
+        composers2.addEventListener('be-decorated.looking-up.value-changed', e => {
+            target.setAttribute('mark', 'good');
         });
     </script>
 

@@ -1,5 +1,5 @@
 import { register } from 'be-hive/register.js';
-import { define } from 'be-decorated/be-decorated.js';
+import { define } from 'be-decorated/DE.js';
 import { hookUp } from 'be-observant/hookUp.js';
 import { unsubscribe } from 'trans-render/lib/subscribe.js';
 export class BeLookingUpController {

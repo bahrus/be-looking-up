@@ -23,18 +23,19 @@
   ],
   "types": "types.d.ts",
   "dependencies": {
-    "be-decorated": "0.0.153",
-    "be-observant": "0.0.136",
-    "be-hive": "0.0.63"
+    "be-decorated": "0.0.182",
+    "be-observant": "0.0.155",
+    "be-hive": "0.0.76"
   },
   "devDependencies": {
-    "may-it-serve": "0.0.0",
+    "may-it-serve": "0.0.3",
     "@skypack/package-check": "0.2.2",
+    "@playwright/test": "1.27.1",
     "@custom-elements-manifest/analyzer": "0.5.7",
-    "be-vigilant": "0.0.17"
+    "be-vigilant": "0.0.24"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "playwright test",
     "serve": "node node_modules/may-it-serve/serve.js",
     "package-check": "package-check",
     "doc": "custom-elements-manifest analyze"
