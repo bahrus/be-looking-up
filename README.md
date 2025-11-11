@@ -25,7 +25,8 @@ However, because the select element hides elements contained within, and be-deco
 ## Options for Restful JSON service
 
 ```html
-<label for=target>Target</label>
+<label>
+NASA Images
 <select id=target be-looking-up='{
         "urlVal": "https://images-api.nasa.gov/search",
         "baseLink": "my-preconnect-link-id",
@@ -37,6 +38,8 @@ However, because the select element hides elements contained within, and be-deco
         "inProgressClassVal": "fetch-in-progress",
 }'>    
 </select>
+</label>
+
 ```
 
 baseLink allows the urlVal to be prepended with the href value of a link tag (ideally located in the head of index.html, typically). 
@@ -48,6 +51,47 @@ One of the trickier aspects of fetch is having a static site that needs to authe
 be-looking-up provides the following support for this scenario:
 
 The authorization property can use the be-observant binding support to get the dynamic value from the hosting web component, or a more global location, like session storage.
+
+## Support for headers and body
+
+Follow same approach as [be-reformable](https://github.com/bahrus/be-reformable?tab=readme-ov-file#support-for-headers-and-body)
+
+Hardcoded:
+
+```html
+<script type=module>
+    (await import('trans-render/lib/weave.js'))
+        .weave({
+            Authorization: "sessionStorage://auth?.bearerToken",
+            "Content-Type": "indexedDB://db/store?.key",
+            "User-Agent": "globalThis://navigator?.userAgent",
+            Accept: "application/json"
+        })
+        .into('rPpwNLcYsUOjFcg+N8lmOA')
+        .andWeave({
+            baseURL:  "globalThis://newton-microservice/href"
+        })
+        .into('qmywdO1vr0SwyuIe4fvzxQ');
+</script>
+...
+
+<label>
+NASA Images
+<select id=target be-looking-up='{
+    "...": "qmywdO1vr0SwyuIe4fvzxQ",
+    "urlVal": "https://images-api.nasa.gov/search",
+    "baseLink": "my-preconnect-link-id",
+    "methodVal": "GET",
+    "headers": {
+       "...": "rPpwNLcYsUOjFcg+N8lmOA",
+    },
+    "cacheVal": "no-store",
+    "inProgressClassVal": "fetch-in-progress",
+}'>    
+</select>
+</label>
+
+```
 
 
 
