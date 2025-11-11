@@ -1,4 +1,6 @@
-# be-looking-up
+# be-looking-up (🙄)
+
+Windows key + . (period) + "rolling"
 
 Attribute-based DOM decorator/behavior equivalent of [xtal-fetch](https://github.com/bahrus/xtal-fetch).
 
