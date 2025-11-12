@@ -23,22 +23,20 @@
   ],
   "types": "types.d.ts",
   "dependencies": {
-    "be-decorated": "0.0.182",
-    "be-observant": "0.0.155",
-    "be-hive": "0.0.76"
+    "be-enhanced": "0.0.189",
+    "be-hive": "0.0.267",
+    "mount-observer": "0.0.105",
+    "trans-render": "0.0.960"
   },
   "devDependencies": {
-    "may-it-serve": "0.0.3",
-    "@skypack/package-check": "0.2.2",
-    "@playwright/test": "1.27.1",
-    "@custom-elements-manifest/analyzer": "0.5.7",
-    "be-vigilant": "0.0.24"
+    "@playwright/test": "1.56.1",
+    "spa-ssi": "0.0.23"
   },
   "scripts": {
     "test": "playwright test",
-    "serve": "node node_modules/may-it-serve/serve.js",
-    "package-check": "package-check",
-    "doc": "custom-elements-manifest analyze"
+    "serve": "node ./node_modules/spa-ssi/serve.js",
+    "safari": "npx playwright wk http://localhost:8000",
+    "update": "ncu -u && npm install"
   },
   "repository": {
     "type": "git",
